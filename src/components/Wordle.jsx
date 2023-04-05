@@ -12,7 +12,12 @@ const Wordle = ({ solution }) => {
     };
   }, [handleKeyup]);
 
-  return <div>current guess - {currentGuess}</div>;
+  return (
+    <>
+      <div>solution - {solution}</div>
+      <div>current guess - {currentGuess}</div>
+    </>
+  );
 };
 
 export default Wordle;
