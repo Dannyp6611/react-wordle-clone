@@ -1,9 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+// components
+import Wordle from './components/Wordle';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [solution, setSolution] = useState(null);
+  const [gameGrid, setGameGrid] = useState([...Array(30)]);
 
-  return <div className="App"></div>;
+  useEffect(() => {
+    fetch('http://localhost:3000/solutions')
+      .then((res) => res.json())
+      .then((data) => {
+        setSolution(data[Math.floor(Math.random() * data.length)].word);
+      });
+  }, []);
+
+  return (
+    <div className="font-sans text-base text-center">
+      <h1 className="text-center border-b border-gray-200 p-5 text-3xl mb-12 font-bold text-[#333]">
+        Wordle Clone
+      </h1>
+      {solution && <Wordle solution={solution} />}
+    </div>
+  );
 }
 
 /* 
@@ -13,13 +32,14 @@ data we need to track:
   -- past guesses
     -- an array of past guesses
     -- each past guess is an array of letter objects [{}, {}, {}, {}, {}]
-    -- each object represents a letter in the guess word {letter: 'a', color: 'yellow'}
+    -- each object represents a letter in the guess word {key: 'a', color: 'yellow'}
   -- current guess
     -- string 'hello'
   -- keypad letters
     -- array of letter objects [{key: 'a', color: 'green'}, {}, {} ...]
   -- number of turns
     -- an integer 0 - 6
+
 game process:
   -- entering words:
     -- user enters a letter & a square is filled with that letter
